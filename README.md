@@ -15,7 +15,7 @@ It will detect the lux level of the environment, and then change the brightness 
 
 ### Communication
 1. Connect the components
-2. Program the ESP32 to read temperature and lux data from BH1750
+2. Program the ESP32 to read temperature and lux data from VEML7700 and BME280
 3. Program the ESP32 to send data to Display device via Bluetooth
 
 ## The Display Device (Remote Control)
@@ -32,4 +32,4 @@ It will detect the lux level of the environment, and then change the brightness 
 4. Program ESP32 to send adjustment commands to the Sensor device
 
 ## Diagram
-![diagram 001](https://github.com/yinyin13/lumiere/assets/148395165/8c8851a2-d4e1-40a7-a2db-5a8add019d93)
+![diagram 001](https://github.com/yinyin13/lumiere/assets/148395165/837b9d80-019b-4136-94b9-cce0888619b1)
