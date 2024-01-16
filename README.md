@@ -8,7 +8,8 @@ It will detect the lux level of the environment, and then change the brightness 
 
 ## The Sensor Device (Ceiling Light)
 ### Components
-- BH1750 sensor
+- VEML7700 sensor
+- BME280 sensor
 - ESP32 microcontroller
 - LED * 2
 
