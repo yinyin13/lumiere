@@ -16,20 +16,24 @@ It will detect the lux level of the environment, and then change the brightness 
 ### Communication
 1. Connect the components
 2. Program the ESP32 to read temperature and lux data from VEML7700 and BME280
-3. Program the ESP32 to send data to Display device via Bluetooth
+3. Program the ESP32 to send data to Display device via WiFi
 
 ## The Display Device (Remote Control)
 ### Components
 - Stepper gauge
-- ESP32 microcontroller
 - LED
 - Buttons
 
 ### Communication
 1. Connect the components
-2. ESP32 receives data from the Sensor device
-3. Program ESP32 to control the stepper gauge to indicate brightness
-4. Program ESP32 to send adjustment commands to the Sensor device
+2. Program ESP32 to control the stepper gauge to indicate brightness
+3. Program ESP32 to send adjustment commands to the Sensor device
 
-## Diagram
-![diagram 001](https://github.com/yinyin13/lumiere/assets/148395165/837b9d80-019b-4136-94b9-cce0888619b1)
+## Diagrams
+### System Architecture
+![3 proj ideas 001 001](https://github.com/yinyin13/lumiere/assets/148395165/f2afd5ec-335d-4739-b6d6-2a342773d5f3)
+
+### Flow Chart
+![3 proj ideas 002](https://github.com/yinyin13/lumiere/assets/148395165/a4fad6eb-7dc7-43a3-931a-614e2981bfc5)
+
+
