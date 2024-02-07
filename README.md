@@ -1,39 +1,47 @@
 # Lumière
 A **smart ambient light** for your home 💡 
 
-It will detect the lux level of the environment, and then change the brightness and color of the LED accordingly based on **user profile, mood, or routine**. This calculation will be **handled by ML**. Users can also change the settings manually with a remote control; the adjustments will be **logged and learned**.
+The Sensor Device utilizes sensors such as VEML7700 and BME280 to **monitor ambient conditions like light levels and temperature**, while also incorporating a MAX9814 microphone for **audio input**. This data, including **emotional cues from a pulse sensor and audio analysis from the microphone**, is processed by **machine learning algorithms**. 
+
+The Display Device provides user interaction, featuring an **encoder for brightness control** and a **stepper gauge to indicate current light modes** like work or relax. Together, Lumiere intelligently adjusts lighting based on environmental factors, user preferences, and emotional states, offering a dynamic and responsive lighting experience.
 
 ## Visualization
-![Braindump-41](https://github.com/yinyin13/lumiere/assets/148395165/aa7f0345-1a8c-4b89-a30b-348738f54d1c)
+![Braindump-41](https://github.com/yinyin13/lumiere/assets/148395165/67c6a3e0-1792-467d-a069-34b5398c3784)
 
 ## The Sensor Device (Ceiling Light)
 ### Components
 - VEML7700 sensor
 - BME280 sensor
-- ESP32 microcontroller
-- LED * 2
+- MAX9814 mic
+- ESP32S3 microcontroller
+- RGB LED strips
+- 5mm LED
 
 ### Communication
 1. Connect the components
 2. Program the ESP32 to read temperature and lux data from VEML7700 and BME280
-3. Program the ESP32 to send data to Display device via WiFi
+3. Program the ESP32 to read audio input from MAX9814
+4. Program the ESP32 to send data to Display device via WiFi
 
 ## The Display Device (Remote Control)
 ### Components
-- Stepper gauge
-- LED
-- Buttons
+- SPDT Switch (On/Off)
+- X27 168 stepper gauge
+- LED 0805
+- Pulse Sensor
+- Encoder
+- ESP32S3 microcontroller
+- Battery
 
 ### Communication
 1. Connect the components
-2. Program ESP32 to control the stepper gauge to indicate brightness
-3. Program ESP32 to send adjustment commands to the Sensor device
+2. Program the ESP32 to control the stepper gauge to indicate current mode
+3. Program the ESP32 to read pulse data from Pulse Sensor
+4. Program the ESP32 to send pulse data and adjustment commands input from the encoder to the Sensor device
 
 ## Diagrams
 ### System Architecture
-![3 proj ideas 001 001](https://github.com/yinyin13/lumiere/assets/148395165/f2afd5ec-335d-4739-b6d6-2a342773d5f3)
+![3 proj ideas 001](https://github.com/yinyin13/lumiere/assets/148395165/63fca96c-4c9e-4e6e-80c7-d26062a6f276)
 
 ### Flow Chart
-![3 proj ideas 002](https://github.com/yinyin13/lumiere/assets/148395165/a4fad6eb-7dc7-43a3-931a-614e2981bfc5)
-
-
+![3 proj ideas 002](https://github.com/yinyin13/lumiere/assets/148395165/06ed2034-7750-4438-ad22-6f5ba9df3dd4)
