@@ -14,7 +14,7 @@ The Display Device provides user interaction, featuring an **encoder for brightn
 - BME280 sensor
 - MAX9814 mic
 - ESP32S3 microcontroller
-- RGB LED strips
+- NeoPixel RGB LED strips
 - 5mm LED
 
 ### Communication
