@@ -1,7 +1,7 @@
 # Lumière
 A **smart ambient light** for your home 💡 
 
-The Sensor Device utilizes sensors such as VEML7700 and BME280 to **monitor ambient conditions like light levels and temperature**, while also incorporating a MAX9814 microphone for **audio input**. This data, including **emotional cues from a pulse sensor and audio analysis from the microphone**, is processed by **machine learning algorithms**. 
+The Sensor Device utilizes sensors such as VEML7700 and BME280 to **monitor ambient conditions like light levels and temperature**, while also incorporating a MAX9814 microphone for **audio input**. The audio input will be sent to Cloud for processing using **speech recognition**. 
 
 The Display Device provides user interaction, featuring an **encoder for brightness control** and a **stepper gauge to indicate current light modes** like work or relax. Together, Lumiere intelligently adjusts lighting based on environmental factors, user preferences, and emotional states, offering a dynamic and responsive lighting experience.
 
@@ -28,7 +28,6 @@ The Display Device provides user interaction, featuring an **encoder for brightn
 - SPDT Switch (On/Off)
 - X27 168 stepper gauge
 - LED 0805
-- Pulse Sensor
 - Encoder
 - ESP32S3 microcontroller
 - Battery
@@ -36,8 +35,7 @@ The Display Device provides user interaction, featuring an **encoder for brightn
 ### Communication
 1. Connect the components
 2. Program the ESP32 to control the stepper gauge to indicate current mode
-3. Program the ESP32 to read pulse data from Pulse Sensor
-4. Program the ESP32 to send pulse data and adjustment commands input from the encoder to the Sensor device
+3. Program the ESP32 to send adjustment commands input from the encoder to the Sensor device
 
 ## Diagrams
 ### System Architecture
