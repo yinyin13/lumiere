@@ -1,84 +1,72 @@
 #include <Arduino.h>
-#include <WiFi.h>
-#include <WiFiMulti.h>
-#include <WiFiClientSecure.h>
+#include "Adafruit_VEML7700.h"
 #include <Wire.h>
-#include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
-#include <Adafruit_VEML7700.h>
-#include <Adafruit_NeoPixel.h>
-
-#define BME_SDA 21
-#define BME_SCL 22
-#define SEALEVELPRESSURE_HPA (1013.25)
-#define NUMPIXELS 60 
-#define PIXELPIN 6  
 
 Adafruit_BME280 bme; // I2C
 Adafruit_VEML7700 veml = Adafruit_VEML7700();
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800); // NeoPixel 
 
-WiFiMulti WiFiMulti;
-WiFiClientSecure client;
+// Initialize variable
+int sensorValue;
 
-#define microphonePin 34
+// Calibration constants (example values)
+const float VREF = 3.3;  // Reference voltage in volts
+const float SENSITIVITY = 3.5;  // Microphone sensitivity in volts per Pascal (example value)
 
 void setup() {
   Serial.begin(115200);
-  WiFiMulti.addAP("Your_SSID", "Your_Password");  // Set your SSID and Password
+  Serial.println("VEML7700 demo");
 
-  Wire.begin();
+  while (!Serial);    // time to get serial running
+  Serial.println(F("BME280 test"));
 
-  if (!bme.begin(0x76)) {
-    Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    delay(1000);
+  unsigned status;
+
+  // Default settings
+  status = bme.begin(0x76);
+  if (!status) {
+    Serial.println(F("BME280 Sensor not found!"));
+    while (1) delay(10);
   }
 
-  if (!veml.begin()) {
-    Serial.println("Failed to initialize VEML7700, check wiring!");
-    while(1);
+  if (veml.begin()) {
+    Serial.println("Found a VEML7700 sensor");
+  } else {
+    Serial.println("No sensor found ... check your wiring?");
+    while (1);
   }
 
-  pinMode(microphonePin, INPUT);
-  pixels.begin(); // Initialize the NeoPixel library.
-
-  while(WiFiMulti.run() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(500);
-  }
-  Serial.println("\nWiFi Connected");
+  veml.setGain(VEML7700_GAIN_1);
+  veml.setIntegrationTime(VEML7700_IT_100MS);
 }
 
 void loop() {
-  int micValue = analogRead(microphonePin);
-  float temperature = bme.readTemperature();  // Temperature
-  int light = veml.readLux();  // Ambient light level
+  // Read temperature
+  float temperature = bme.readTemperature();
+  
+  // Read lux
+  float lux = veml.readLux();
 
-  uint8_t adjustedBrightness = map(temperature, -10, 40, 0, 255); // Assuming the temperature will range from -10 to 40
-  if (light < 300) adjustedBrightness = 255; // If ambient lux level is low, make it the brightest
+  // Get the analog value from MAX9814
+  sensorValue = analogRead(A0);
+  
+  // Convert analog value to voltage
+  float voltage = sensorValue * (VREF / 1023.0);
 
-  pixels.setBrightness(adjustedBrightness);
+  // Convert voltage to sound pressure level (SPL) in Pascals
+  float soundPressure = voltage / SENSITIVITY;
 
-  // Set color and light up the strip
-  for(int i=0; i<NUMPIXELS; i++) {
-    pixels.setPixelColor(i, pixels.Color(0, adjustedBrightness, 0)); // Green for this example
-  }
-  pixels.show();
+  // Convert sound pressure level to decibels (dB)
+  float dB = 20 * log10(soundPressure / 0.00002); // 0.00002 Pa is the reference pressure for 0 dB SPL
+  
+  // Send all data over serial
+  Serial.print("Temperature: ");
+  Serial.print(temperature);
+  Serial.print(" °C, Lux: ");
+  Serial.print(lux);
+  Serial.print(" lux, Sound Pressure Level: ");
+  Serial.print(dB);
+  Serial.println(" dB");
 
-  // Now it sends micValue, temperature and light data.
-  String post_data = "audio_data=" + String(micValue) + "&temperature=" + String(temperature) + "&light_level=" + String(light);
-
-  if(client.connect("Your_Cloud_Server_URL", 443)){  
-    client.println("POST /api/v1/audio HTTP/1.1");
-    client.println("Host: <your-cloud-server>");
-    client.println("Content-Type: application/x-www-form-urlencoded");
-    client.print("Content-Length: ");
-    client.println(post_data.length());
-    client.println();
-    client.print(post_data);
-  }
-
-  client.flush();
-  client.stop();
-  delay(15000);
+  delay(1000); // Adjust delay as needed
 }
